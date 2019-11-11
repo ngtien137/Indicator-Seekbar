@@ -1,6 +1,6 @@
 # Indicator-Seekbar 
 Seekbar with Indicator and Float text above 
-##Preview ![alt text](https://github.com/ngtien137/Indicator-Seekbar/blob/master/images/reviews.png) 
+##Preview ![alt text](https://github.com/ngtien137/Indicator-Seekbar/blob/master/images/new_reviews.png) 
 ## Getting Started 
 * This library use Kotlin 
 * Add maven in your root build.gradle at the end of repositories:
@@ -41,6 +41,8 @@ TAG is the version of library. If you don't know, remove it with +
   
   app:is_indicator="@drawable/indicator_rect" \\drawable of indicator on seekbar (vector*) 
                                                 - Ảnh của các mốc trên seekbar 
+  app:is_indicator_progress="@drawable/indicator_progress" \\drawable of indicator progress
+                                            - Ảnh của các mốc khi bị thumb vượt qua
   app:is_indicator_width="4dp" \\indicator width - Chiều dài của một mốc 
   app:is_indicator_height="8dp" \\indicator height - Chiều cao của một mốc 
   
@@ -52,6 +54,8 @@ TAG is the version of library. If you don't know, remove it with +
   app:is_show_indicator_text="true" \\show indicator text below seekbar 
                                     - Có hiển thị text ở dưới các mốc hay không   
   app:is_text_indicator_size="14sp" \\indicator text size - Kích cỡ của chúng 
+  app:is_text_indicator_unit="'" \\The unit of text indicator, here is ' after text indicator
+                                  Đơn vị, 1 đoạn string phía sau text indicator
   app:is_text_indicator_color="@color/violet" \\indicator text color - Màu của chúng 
   app:is_space_text_indicator_to_bar="4dp" \\space between indicator text and seekbar 
                                             - Khoảng cách giữa chúng và seekbar 
