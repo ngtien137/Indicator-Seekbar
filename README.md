@@ -1,7 +1,9 @@
 # Indicator-Seekbar 
 Seekbar with Indicator and Float text above 
 ##Preview ![alt text](https://github.com/ngtien137/Indicator-Seekbar/blob/master/images/reviews.png) 
-## Getting Started * This library use Kotlin * Add maven in your root build.gradle at the end of repositories:
+## Getting Started 
+* This library use Kotlin 
+* Add maven in your root build.gradle at the end of repositories:
 
 ``` 
 allprojects { 
