@@ -16,11 +16,11 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         setContentView(R.layout.activity_main)
         seekbar.setListener(object:IndicatorSeekbar.ISeekbarListener{
             override fun onSeeking(progress: Int) {
-                Log.e(TAG,"Seeking, Progress: $progress")
+                Log.e(TAG,"Seeking, Progress: $progress, isUserDrag: ${seekbar.isSeekByUser}")
             }
 
             override fun onStopSeeking(progress: Int) {
-                Log.e(TAG,"Stop Seeking, Progress: $progress")
+                Log.e(TAG,"Stop Seeking, Progress: $progress, isUserDrag: ${seekbar.isSeekByUser}")
             }
         })
     }

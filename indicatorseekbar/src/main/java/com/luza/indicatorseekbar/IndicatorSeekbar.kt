@@ -220,6 +220,8 @@ class IndicatorSeekbar @JvmOverloads constructor(
         if (newProgress>max)
             newProgress = max
         this.progress = newProgress
+        listener?.onSeeking(progress)
+        listener?.onStopSeeking(progress)
         invalidateWithCurrentDataSeekbar()
         invalidate()
     }
@@ -231,8 +233,11 @@ class IndicatorSeekbar @JvmOverloads constructor(
             this.min = 0
             this.max = 100
         }
-        if (progress !in this.min..this.max)
+        if (progress !in this.min..this.max) {
             progress = 0
+            listener?.onSeeking(progress)
+            listener?.onStopSeeking(progress)
+        }
         invalidateWithCurrentDataSeekbar()
         invalidate()
     }
@@ -280,15 +285,13 @@ class IndicatorSeekbar @JvmOverloads constructor(
             return super.onTouchEvent(event)
         return when (event.actionMasked) {
             MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_UP -> {
-                Log.e(TAG, "cancel")
+                listener?.onStopSeeking(progress)
                 isSeeking = false
                 isSeekByUser = false
-                listener?.onStopSeeking(progress)
                 false
             }
             MotionEvent.ACTION_DOWN -> {
                 pointDown.x = event.x
-                Log.e(TAG, "Down")
                 isSeekByUser = true
                 if (pointDown.x !in rectThumb.left-sizeTouchExtraArea..rectThumb.right+sizeTouchExtraArea) {
                     onSeek((pointDown.x-rectThumb.left).toInt())
