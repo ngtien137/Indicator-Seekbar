@@ -31,6 +31,7 @@ class IndicatorSeekbar @JvmOverloads constructor(
 
     private var drawableThumb: Drawable? = null
     private var drawableIndicator: Drawable? = null
+    private var drawableIndicatorProgress: Drawable? = null
 
     private var sizeSeekBar = 0
     private var sizeTextIndicator = 0
@@ -69,18 +70,21 @@ class IndicatorSeekbar @JvmOverloads constructor(
     private val pointDown = PointF(0f, 0f)
 
     private var listener: ISeekbarListener? = null
+    private var textIndicatorUnit = ""
 
     init {
         attrs?.let {
             val ta = context.obtainStyledAttributes(attrs, R.styleable.IndicatorSeekbar)
-            drawableThumb = ta.getDrawable(R.styleable.IndicatorSeekbar_is_thumb)
-            if (drawableThumb == null) {
-                drawableThumb = ContextCompat.getDrawable(context, R.drawable.thumb_default)
-            }
+            drawableThumb =
+                ta.getDrawable(R.styleable.IndicatorSeekbar_is_thumb) ?: ContextCompat.getDrawable(
+                    context,
+                    R.drawable.thumb_default
+                )
             drawableIndicator = ta.getDrawable(R.styleable.IndicatorSeekbar_is_indicator)
-            if (drawableIndicator==null){
-                drawableIndicator = ContextCompat.getDrawable(context,R.drawable.indicator_default)
-            }
+                ?: ContextCompat.getDrawable(context, R.drawable.indicator_default)
+            drawableIndicatorProgress =
+                ta.getDrawable(R.styleable.IndicatorSeekbar_is_indicator_progress)
+                    ?: ContextCompat.getDrawable(context, R.drawable.indicator_progress)
 
             sizeThumb = ta.getDimensionPixelSize(R.styleable.IndicatorSeekbar_is_thumb_size, 10)
             indicatorWidth =
@@ -91,7 +95,8 @@ class IndicatorSeekbar @JvmOverloads constructor(
                 ta.getDimensionPixelSize(R.styleable.IndicatorSeekbar_is_seekbar_height, 20)
             seekBarCorners =
                 ta.getDimensionPixelSize(R.styleable.IndicatorSeekbar_is_seekbar_corners, 0)
-            sizeTouchExtraArea = ta.getDimensionPixelSize(R.styleable.IndicatorSeekbar_is_thumb_touch_extra_area,0)
+            sizeTouchExtraArea =
+                ta.getDimensionPixelSize(R.styleable.IndicatorSeekbar_is_thumb_touch_extra_area, 0)
 
             paintTextValue.textSize =
                 ta.getDimensionPixelSize(R.styleable.IndicatorSeekbar_is_text_value_size, 20)
@@ -113,18 +118,26 @@ class IndicatorSeekbar @JvmOverloads constructor(
                 Color.BLACK
             )
 
-            spaceBetweenTextIndicatorToBar = ta.getDimensionPixelSize(R.styleable.IndicatorSeekbar_is_space_text_indicator_to_bar,0)
-            spaceBetweenTextValueToBar = ta.getDimensionPixelSize(R.styleable.IndicatorSeekbar_is_space_text_value_to_bar,0)
+            spaceBetweenTextIndicatorToBar = ta.getDimensionPixelSize(
+                R.styleable.IndicatorSeekbar_is_space_text_indicator_to_bar,
+                0
+            )
+            spaceBetweenTextValueToBar =
+                ta.getDimensionPixelSize(R.styleable.IndicatorSeekbar_is_space_text_value_to_bar, 0)
 
-            isShowIndicatorText = ta.getBoolean(R.styleable.IndicatorSeekbar_is_show_indicator_text,false)
-            isShowProgressValue = ta.getBoolean(R.styleable.IndicatorSeekbar_is_show_progress_value,false)
+            isShowIndicatorText =
+                ta.getBoolean(R.styleable.IndicatorSeekbar_is_show_indicator_text, false)
+            isShowProgressValue =
+                ta.getBoolean(R.styleable.IndicatorSeekbar_is_show_progress_value, false)
 
+            textIndicatorUnit =
+                ta.getString(R.styleable.IndicatorSeekbar_is_text_indicator_unit) ?: ""
             min = ta.getInt(R.styleable.IndicatorSeekbar_is_min, 0)
             max = ta.getInt(R.styleable.IndicatorSeekbar_is_max, 100)
             progress = ta.getInt(R.styleable.IndicatorSeekbar_is_progress, 0)
             numberIndicator = ta.getInt(R.styleable.IndicatorSeekbar_is_number_indicator, 5)
-            if (numberIndicator<0)
-                numberIndicator  = 5
+            if (numberIndicator < 0)
+                numberIndicator = 5
             ta.recycle()
         }
     }
@@ -137,7 +150,8 @@ class IndicatorSeekbar @JvmOverloads constructor(
         if (viewWidth != 0 && viewHeight != 0) {
             val centerView = viewHeight / 2f
             realSeekbarWidth = viewWidth - paddingLeft - paddingRight - sizeThumb
-            spaceBetweenIndicator = ((realSeekbarWidth-(numberIndicator-1)*indicatorWidth)/(numberIndicator-1)).toFloat()
+            spaceBetweenIndicator =
+                ((realSeekbarWidth - (numberIndicator - 1) * indicatorWidth) / (numberIndicator - 1)).toFloat()
 
 
             rectSeekbar.left = realLeft + sizeThumb / 2
@@ -184,27 +198,36 @@ class IndicatorSeekbar @JvmOverloads constructor(
                 rectSeekbarProgress,
                 seekBarCorners.toFloat(), seekBarCorners.toFloat(), paintSeekbarProgress
             )
-            var offset = rectSeekbar.left - indicatorWidth/2
-            for (i in 0 until numberIndicator){
-                val right = offset+indicatorWidth
-                drawableIndicator?.drawAt(RectF(offset,rectIndicator.top,right,rectIndicator.bottom),canvas)
-                if (isShowIndicatorText){
-                    val text = (i.toFloat()/(numberIndicator-1)*(max-min)+min).toInt().toString()
-                    paintTextIndicator.getTextBounds(text,0,text.length,rectText)
-                    val xText = offset + indicatorWidth/2 - rectText.width()/2
-                    val yText = rectThumb.bottom + spaceBetweenTextIndicatorToBar + rectText.height()
-                    canvas.drawText(text,xText,yText,paintTextIndicator)
+            var offset = rectSeekbar.left - indicatorWidth / 2
+            for (i in 0 until numberIndicator) {
+                val right = offset + indicatorWidth
+                drawableIndicator?.drawAt(
+                    RectF(
+                        offset,
+                        rectIndicator.top,
+                        right,
+                        rectIndicator.bottom
+                    ), canvas
+                )
+                if (isShowIndicatorText) {
+                    val text =
+                        (i.toFloat() / (numberIndicator - 1) * (max - min) + min).toInt().toString()
+                    paintTextIndicator.getTextBounds(text, 0, text.length, rectText)
+                    val xText = offset + indicatorWidth / 2 - rectText.width() / 2
+                    val yText =
+                        rectThumb.bottom + spaceBetweenTextIndicatorToBar + rectText.height()
+                    canvas.drawText(text, xText, yText, paintTextIndicator)
                 }
-                offset+=spaceBetweenIndicator+indicatorWidth
+                offset += spaceBetweenIndicator + indicatorWidth
             }
             drawableThumb?.drawAt(rectThumb, canvas)
 
-            if (isShowProgressValue){
-                val sProgress = progress.toString()
-                paintTextValue.getTextBounds(sProgress,0,sProgress.length,rectText)
-                val xText = rectThumb.left + sizeThumb/2 - rectText.width()/2
+            if (isShowProgressValue) {
+                val sProgress = progress.toString()+textIndicatorUnit
+                paintTextValue.getTextBounds(sProgress, 0, sProgress.length, rectText)
+                val xText = rectThumb.left + sizeThumb / 2 - rectText.width() / 2
                 val yText = rectThumb.top - spaceBetweenTextValueToBar
-                canvas.drawText(sProgress,xText,yText,paintTextValue)
+                canvas.drawText(sProgress, xText, yText, paintTextValue)
             }
         }
     }
@@ -213,11 +236,11 @@ class IndicatorSeekbar @JvmOverloads constructor(
         this.listener = listener
     }
 
-    fun setProgress(progress:Int){
+    fun setProgress(progress: Int) {
         var newProgress = progress
-        if (newProgress<min)
+        if (newProgress < min)
             newProgress = min
-        if (newProgress>max)
+        if (newProgress > max)
             newProgress = max
         this.progress = newProgress
         listener?.onSeeking(progress)
@@ -226,10 +249,10 @@ class IndicatorSeekbar @JvmOverloads constructor(
         invalidate()
     }
 
-    fun setRange(min:Int,max:Int){
+    fun setRange(min: Int, max: Int) {
         this.min = min
         this.max = max
-        if (min>=max){
+        if (min >= max) {
             this.min = 0
             this.max = 100
         }
@@ -249,12 +272,13 @@ class IndicatorSeekbar @JvmOverloads constructor(
     /**
      * Progress to dimen
      */
-    private fun Int.ToDimension() = (this - min).toFloat() / (max - min) * realSeekbarWidth + realLeft
+    private fun Int.ToDimension() =
+        (this - min).toFloat() / (max - min) * realSeekbarWidth + realLeft
 
     private fun Float.ToProgress() =
         ((this - realLeft) / realSeekbarWidth * (max - min) + min).toInt()
 
-    private fun invalidateWithCurrentDataSeekbar(){
+    private fun invalidateWithCurrentDataSeekbar() {
         invalidateThumbWithProgress()
         invalidateProgressTrack()
     }
@@ -264,8 +288,8 @@ class IndicatorSeekbar @JvmOverloads constructor(
         rectThumb.right = rectThumb.left + sizeThumb
     }
 
-    private fun invalidateProgressTrack(){
-        rectSeekbarProgress.right = rectThumb.left+sizeThumb/2
+    private fun invalidateProgressTrack() {
+        rectSeekbarProgress.right = rectThumb.left + sizeThumb / 2
     }
 
     private fun setThumbPosition(posLeft: Float) {
@@ -293,8 +317,8 @@ class IndicatorSeekbar @JvmOverloads constructor(
             MotionEvent.ACTION_DOWN -> {
                 pointDown.x = event.x
                 isSeekByUser = true
-                if (pointDown.x !in rectThumb.left-sizeTouchExtraArea..rectThumb.right+sizeTouchExtraArea) {
-                    onSeek((pointDown.x-rectThumb.left).toInt())
+                if (pointDown.x !in rectThumb.left - sizeTouchExtraArea..rectThumb.right + sizeTouchExtraArea) {
+                    onSeek((pointDown.x - rectThumb.left).toInt())
                 }
                 true
             }
@@ -310,7 +334,7 @@ class IndicatorSeekbar @JvmOverloads constructor(
                     if (abs(xDiff) >= touchSlop) {
                         isSeeking = true
                         true
-                    }else
+                    } else
                         false
                 }
             }
@@ -320,7 +344,7 @@ class IndicatorSeekbar @JvmOverloads constructor(
         }
     }
 
-    private fun onSeek(distance:Int){
+    private fun onSeek(distance: Int) {
         setThumbPosition(rectThumb.left + distance)
         this.progress = rectThumb.left.ToProgress()
         invalidate()
@@ -328,7 +352,7 @@ class IndicatorSeekbar @JvmOverloads constructor(
     }
 
     interface ISeekbarListener {
-        fun onSeeking(progress: Int){}
-        fun onStopSeeking(progress: Int){}
+        fun onSeeking(progress: Int) {}
+        fun onStopSeeking(progress: Int) {}
     }
 }

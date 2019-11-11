@@ -20,7 +20,8 @@
         app:is_thumb_touch_extra_area="5dp"
         app:is_thumb_size="18dp"
 
-        app:is_indicator="@drawable/indicator_rect"
+        app:is_indicator="@drawable/indicator_default"
+        app:is_indicator_progress="@drawable/indicator_progress"
         app:is_indicator_width="4dp"
         app:is_indicator_height="8dp"
 
@@ -30,6 +31,7 @@
         app:is_seekbar_progress_color="#0ff"
 
         app:is_show_indicator_text="true"
+        app:is_text_indicator_unit="'"
         app:is_text_indicator_size="14dp"
         app:is_text_indicator_color="@color/violet"
         app:is_space_text_indicator_to_bar="4dp"
