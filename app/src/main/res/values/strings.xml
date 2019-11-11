@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">IndicatorSeekbarDemo</string>
+    <string name="set_range">Set Range</string>
+    <string name="min">Min</string>
+    <string name="max">Max</string>
+    <string name="set_progress">Set Progress</string>
+    <string name="progress">Progress</string>
+</resources>
