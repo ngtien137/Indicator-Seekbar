@@ -1,7 +1,7 @@
 # Indicator-Seekbar 
 Seekbar with Indicator and Float text above 
 
-##Preview 
+## Preview 
 ![alt text](https://github.com/ngtien137/Indicator-Seekbar/blob/master/images/new_reviews.png) 
 ## Getting Started 
 * This library use Kotlin 
@@ -75,7 +75,7 @@ TAG is the version of library. If you don't know, remove it with +
   app:layout_constraintTop_toTopOf="parent" /> 
   
   ``` 
-  ** Listener and some function: - Listener - Sự kiện lắng nghe kéo thả seekbar 
+  - Listener and some function: - Listener - Sự kiện lắng nghe kéo thả seekbar 
   
   ``` 
   
