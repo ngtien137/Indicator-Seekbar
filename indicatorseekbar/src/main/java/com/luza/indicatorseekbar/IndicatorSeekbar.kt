@@ -201,7 +201,11 @@ class IndicatorSeekbar @JvmOverloads constructor(
             var offset = rectSeekbar.left - indicatorWidth / 2
             for (i in 0 until numberIndicator) {
                 val right = offset + indicatorWidth
-                drawableIndicator?.drawAt(
+                val drawable = if (offset + indicatorWidth / 2 < rectThumb.left + sizeThumb / 2)
+                    drawableIndicatorProgress
+                else
+                    drawableIndicator
+                drawable?.drawAt(
                     RectF(
                         offset,
                         rectIndicator.top,
@@ -211,7 +215,7 @@ class IndicatorSeekbar @JvmOverloads constructor(
                 )
                 if (isShowIndicatorText) {
                     val text =
-                        (i.toFloat() / (numberIndicator - 1) * (max - min) + min).toInt().toString()
+                        (i.toFloat() / (numberIndicator - 1) * (max - min) + min).toInt().toString() + textIndicatorUnit
                     paintTextIndicator.getTextBounds(text, 0, text.length, rectText)
                     val xText = offset + indicatorWidth / 2 - rectText.width() / 2
                     val yText =
@@ -223,7 +227,7 @@ class IndicatorSeekbar @JvmOverloads constructor(
             drawableThumb?.drawAt(rectThumb, canvas)
 
             if (isShowProgressValue) {
-                val sProgress = progress.toString()+textIndicatorUnit
+                val sProgress = progress.toString()
                 paintTextValue.getTextBounds(sProgress, 0, sProgress.length, rectText)
                 val xText = rectThumb.left + sizeThumb / 2 - rectText.width() / 2
                 val yText = rectThumb.top - spaceBetweenTextValueToBar
