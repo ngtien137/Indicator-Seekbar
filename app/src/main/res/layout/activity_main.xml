@@ -11,10 +11,10 @@
         android:id="@+id/seekbar"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        app:is_progress="50"
+        app:is_progress="110"
         app:is_min="0"
         app:is_max="200"
-        app:is_number_indicator="3"
+        app:is_number_indicator="9"
 
         app:is_thumb="@drawable/ic_drawable"
         app:is_thumb_touch_extra_area="5dp"
