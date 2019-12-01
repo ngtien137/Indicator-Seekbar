@@ -33,8 +33,8 @@ TAG is the version of library. If you don't know, remove it with +
   android:layout_width="match_parent" 
   android:layout_height="80dp" 
   app:is_progress="50" \\Current Progress of seekbar - Giá trị hiện tại 
-  app:is_min="0" \\Max Value of seekbar - Giá trị nhỏ nhất 
-  app:is_max="200" \\Min Value of seekbar - Giá trị lớn nhất 
+  app:is_min="0" \\Min Value of seekbar - Giá trị nhỏ nhất 
+  app:is_max="200" \\Max Value of seekbar - Giá trị lớn nhất 
   app:is_number_indicator="9" \\number of indicators - Số lượng mốc trên seekbar 
   
   app:is_thumb="@drawable/ic_drawable" \\drawable of thumb (vector*) - ảnh thumb của seekbar 
